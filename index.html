@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Konversi Biogas Lengkap (1 Halaman)</title>
+    <style>
+        :root {
+            --card-bg: #ffffff;
+            --text-title: #1a365d;    
+            --text-body: #2d3748;     
+            --text-muted: #4a5568;    
+            --input-editable-bg: #fffff0; 
+            --input-editable-border: #ecc94b; 
+            --input-readonly-bg: #edf2f7;  
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-body);
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-color: #1a3a3a;
+        }
+
+        body.show-cangkang {
+            --primary-light: #4fd1c5;
+            --primary-main: #234e52;
+            --row-bg: #f0fdfa; 
+            background-image: linear-gradient(135deg, #132d2d 0%, #234e52 100%);
+        }
+
+        body.show-listrik {
+            --primary-light: #63b3ed;
+            --primary-main: #2b6cb0;
+            --row-bg: #eff6ff; 
+            background-image: linear-gradient(135deg, #0f2340 0%, #2b6cb0 100%);
+        }
+
+        .main-wrapper {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .version-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .version-card {
+            background: var(--card-bg);
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .version-card h3 { margin: 0 0 4px 0; color: var(--text-title); font-size: 0.9rem; line-height: 1.2; }
+        .version-card p { margin: 0; font-size: 0.72rem; color: var(--text-muted); line-height: 1.3; }
+        .version-card.active { border-color: var(--primary-light); box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-header {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            color: var(--text-title);
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive Grid: 1 Kolom di HP, 2 Kolom di Desktop */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+            .version-card h3 { font-size: 1rem; }
+            .version-card p { font-size: 0.75rem; }
+            .table-header h2 { font-size: 1.4rem; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+            font-size: 0.85rem;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 6px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th.col-label { text-align: left; }
+        th.col-input { text-align: right; width: 100px; }
+        th.col-unit  { text-align: left; width: 80px; padding-left: 8px; }
+
+        td {
+            padding: 6px;
+            vertical-align: middle;
+        }
+
+        tr.data-row {
+            background-color: var(--row-bg); 
+            border-radius: 6px;
+        }
+
+        .col-label { text-align: left; font-weight: 500; }
+        .col-input { text-align: right; }
+        .col-unit  { text-align: left; color: var(--text-muted); font-weight: 600; padding-left: 8px; font-size: 0.8rem; }
+
+        .range-info {
+            font-size: 0.7rem;
+            color: #718096;
+            font-weight: normal;
+            display: block;
+            margin-top: 2px;
+        }
+
+        tr.data-row td:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+        tr.data-row td:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+        input {
+            width: 100%;
+            max-width: 110px;
+            padding: 6px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: right;
+            box-sizing: border-box;
+            -moz-appearance: textfield;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .editable { background-color: var(--input-editable-bg); border-color: var(--input-editable-border); color: #744210; }
+        .readonly { background-color: var(--input-readonly-bg); color: var(--text-muted); border-color: #e2e8f0; font-weight: 500; }
+
+        .section-title {
+            color: var(--primary-main);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin: 16px 0 6px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .v-cangkang, .v-listrik { display: none; }
+        body.show-cangkang .v-cangkang { display: table-row; }
+        body.show-listrik .v-listrik { display: table-row; }
+        body.show-cangkang .box-cangkang { display: block; }
+        body.show-listrik .box-listrik { display: block; }
+
+        .print-actions {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-print {
+            background-color: var(--primary-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (min-width: 768px) {
+            .btn-print { width: auto; }
+            .print-actions { justify-content: flex-end; }
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0.2cm;
+            }
+            html, body { background: #ffffff !important; background-image: none !important; margin: 0 !important; padding: 0 !important; font-size: 9.5px !important; }
+            .version-selection, .print-actions { display: none !important; }
+            .table-container { box-shadow: none !important; padding: 0 !important; }
+            .table-header { margin-bottom: 3px !important; }
+            .table-header h2 { font-size: 1.1rem !important; }
+            .grid-layout { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
+            table { border-spacing: 0 2px !important; }
+            td { padding: 3px 5px !important; }
+            input { width: 85px !important; padding: 2px 4px !important; }
+            .col-input { width: 90px !important; }
+            .col-unit { width: 110px !important; padding-left: 6px !important; font-size: 0.7rem !important; }
+            body.show-cangkang tr.data-row { background-color: #f0fdfa !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body.show-listrik tr.data-row { background-color: #eff6ff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body.show-cangkang .v-cangkang { display: table-row !important; }
+            body.show-listrik .v-listrik { display: table-row !important; }
+        }
+    </style>
+</head>
+<body class="show-cangkang">
+
+<div class="main-wrapper">
+    <div class="version-selection">
+        <div id="btn_cangkang" class="version-card active" onclick="switchVersion('cangkang')">
+            <h3>Versi Cangkang</h3>
+            <p>Penyetaraan biogas ke berat cangkang sawit.</p>
+        </div>
+        <div id="btn_listrik" class="version-card" onclick="switchVersion('listrik')">
+            <h3>Versi Listrik</h3>
+            <p>Analisis daya, energi & kapasitas generator.</p>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-header">
+            <h2 id="judul_kalkulator">Kalkulator Konversi Biogas Menjadi Ekuivalen Cangkang</h2>
+        </div>
+        
+        <div class="grid-layout">
+            
+            <!-- KOLOM KIRI -->
+            <div>
+                <div class="section-title">Parameter Desain Reaktor</div>
+                <table>
+                    <thead>
+                        <tr><th class="col-label">Parameter Analisis</th><th class="col-input">Nilai</th><th class="col-unit">Satuan</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <td class="col-label">Volume Efektif Reaktor</td>
+                            <td class="col-input"><input type="number" id="vol_reaktor" class="editable" value="0"></td>
+                            <td class="col-unit">M³</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Retention Time <span class="range-info">(Rentang: 20 - 40)</span></td>
+                            <td class="col-input"><input type="number" id="retention_time" class="editable" value="0"></td>
+                            <td class="col-unit">Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Kebutuhan POME Desain</td>
+                            <td class="col-input"><input type="number" id="pome_desain" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">COD POME Desain</td>
+                            <td class="col-input"><input type="number" id="cod_pome_desain" class="editable" value="0"></td>
+                            <td class="col-unit">Mg/l</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">OLR (Organic Loading Rate)</td>
+                            <td class="col-input"><input type="number" id="olr" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">Kg/M³.Hri</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">COD Loading Desain</td>
+                            <td class="col-input"><input type="number" id="cod_loading_desain" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">Kg/Hari</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="section-title">Kondisi Operasional Aktual</div>
+                <table>
+                    <thead>
+                        <tr><th class="col-label">Parameter Aktual</th><th class="col-input">Nilai</th><th class="col-unit">Satuan</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <td class="col-label">COD Aktual</td>
+                            <td class="col-input"><input type="number" id="cod_aktual" class="editable" value="0"></td>
+                            <td class="col-unit">Mg/l</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">% COD Loading (Akt/Des)</td>
+                            <td class="col-input"><input type="number" id="pct_cod_loading" class="editable" value="0"></td>
+                            <td class="col-unit">%</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Kebutuhan POME Aktual</td>
+                            <td class="col-input"><input type="number" id="pome_aktual" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">COD Loading POME Akt</td>
+                            <td class="col-input"><input type="number" id="cod_loading_aktual" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">Kg/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Retention Time Akt (HRT)</td>
+                            <td class="col-input"><input type="number" id="retention_time_aktual" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Jam Feeding <span class="range-info">(Rentang: 1 - 24)</span></td>
+                            <td class="col-input"><input type="number" id="jam_feeding" class="editable" value="0"></td>
+                            <td class="col-unit">Jam</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Flow Feeding</td>
+                            <td class="col-input"><input type="number" id="flow_feeding" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/Jam</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- KOLOM KANAN -->
+            <div>
+                <div class="section-title">Produksi Gas & Metana</div>
+                <table>
+                    <thead>
+                        <tr><th class="col-label">Parameter Produksi</th><th class="col-input">Nilai</th><th class="col-unit">Satuan</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <td class="col-label">COD Removal Eff <span class="range-info">(Rentang: 70 - 90)</span></td>
+                            <td class="col-input"><input type="number" id="cod_removal_eff" class="editable" value="0"></td>
+                            <td class="col-unit">%</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">COD Removed</td>
+                            <td class="col-input"><input type="number" id="cod_removed" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">Kg/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Faktor Konversi Metana <span class="range-info">(Rentang: 0.30 - 0.35)</span></td>
+                            <td class="col-input"><input type="number" id="faktor_ch4" class="editable" value="0.32" step="0.01"></td>
+                            <td class="col-unit">M³/Kg</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Produksi Metana (CH₄)</td>
+                            <td class="col-input"><input type="number" id="prod_ch4" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Konsentrasi Metana <span class="range-info">(Rentang: 50 - 70)</span></td>
+                            <td class="col-input"><input type="number" id="konsentrasi_ch4" class="editable" value="0"></td>
+                            <td class="col-unit">%</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Prod Biogas Hitung</td>
+                            <td class="col-input"><input type="number" id="prod_biogas" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Prod Biogas Aktual</td>
+                            <td class="col-input"><input type="number" id="prod_biogas_aktual" class="editable" value="0"></td>
+                            <td class="col-unit">M³/Hari</td>
+                        </tr>
+                        <tr class="data-row">
+                            <td class="col-label">Yield Biogas Aktual</td>
+                            <td class="col-input"><input type="number" id="yield_biogas_aktual" class="readonly" value="0" readonly></td>
+                            <td class="col-unit">M³/M³</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- OUTPUT VERSI CANGKANG -->
+                <div class="box-cangkang">
+                    <div class="section-title">Output Ekuivalen Cangkang</div>
+                    <table>
+                        <thead>
+                            <tr><th class="col-label">Parameter Cangkang</th><th class="col-input">Nilai</th><th class="col-unit">Satuan</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Nilai Kalor CH₄ <span class="range-info">(Rentang: 34 - 38)</span></td>
+                                <td class="col-input"><input type="number" id="lhv_ch4" class="editable" value="35.90" step="0.01"></td>
+                                <td class="col-unit">MJ/M³</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Nilai Kalor Cangkang <span class="range-info">(Rentang: 15 - 19)</span></td>
+                                <td class="col-input"><input type="number" id="lhv_cangkang" class="editable" value="16.50" step="0.01"></td>
+                                <td class="col-unit">MJ/Kg</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Energi Potensial (Hitung)</td>
+                                <td class="col-input"><input type="number" id="total_energi_mj" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MJ/Hari</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Ekuivalen Cangkang (Hitung)</td>
+                                <td class="col-input"><input type="number" id="ekuivalen_cangkang_ton" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">Ton/Hari</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Energi Potensial (Aktual)</td>
+                                <td class="col-input"><input type="number" id="total_energi_mj_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MJ/Hari</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">Ekuivalen Cangkang (Aktual)</td>
+                                <td class="col-input"><input type="number" id="ekuivalen_cangkang_ton_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">Ton/Hari</td>
+                            </tr>
+                            <tr class="data-row v-cangkang">
+                                <td class="col-label">% Ekuivalen (Akt/Hit)</td>
+                                <td class="col-input"><input type="number" id="pct_ekuivalen_cangkang" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- OUTPUT VERSI LISTRIK -->
+                <div class="box-listrik">
+                    <div class="section-title">Output Energi & Daya Listrik</div>
+                    <table>
+                        <thead>
+                            <tr><th class="col-label">Parameter Listrik</th><th class="col-input">Nilai</th><th class="col-unit">Satuan</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Nilai Kalor CH₄ <span class="range-info">(Rentang: 9 - 11)</span></td>
+                                <td class="col-input"><input type="number" id="kalor_ch4_kwh" class="editable" value="9.97" step="0.01"></td>
+                                <td class="col-unit">kWh/M³</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Efisiensi Generator <span class="range-info">(Rentang: 35 - 45)</span></td>
+                                <td class="col-input"><input type="number" id="efisiensi_listrik" class="editable" value="40"></td>
+                                <td class="col-unit">%</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Jam Operasi Gen <span class="range-info">(Rentang: 1 - 24)</span></td>
+                                <td class="col-input"><input type="number" id="jam_operasi_gen" class="editable" value="0"></td>
+                                <td class="col-unit">Jam/Hari</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Energi Listrik Desain</td>
+                                <td class="col-input"><input type="number" id="energi_listrik_kwh" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">kWh/Hari</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Energi Listrik Desain (MJ)</td>
+                                <td class="col-input"><input type="number" id="energi_listrik_mj" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MJ/Hari</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Energi Listrik Aktual</td>
+                                <td class="col-input"><input type="number" id="energi_listrik_kwh_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">kWh/Hari</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Energi Listrik Aktual (MJ)</td>
+                                <td class="col-input"><input type="number" id="energi_listrik_mj_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MJ/Hari</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Daya Kontinu Desain</td>
+                                <td class="col-input"><input type="number" id="potensi_daya_kw" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">kW Eng.</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Daya Kontinu Desain (MW)</td>
+                                <td class="col-input"><input type="number" id="potensi_daya_mw" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MW</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Daya Kontinu Aktual</td>
+                                <td class="col-input"><input type="number" id="potensi_daya_kw_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">kW Eng.</td>
+                            </tr>
+                            <tr class="data-row v-listrik">
+                                <td class="col-label">Daya Kontinu Aktual (MW)</td>
+                                <td class="col-input"><input type="number" id="potensi_daya_mw_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-unit">MW</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="print-actions">
+            <button class="btn-print" onclick="window.print()">Cetak Halaman Ini (PDF)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchVersion(version) {
+        const body = document.body;
+        const btnCangkang = document.getElementById('btn_cangkang');
+        const btnListrik = document.getElementById('btn_listrik');
+        const judulKalkulator = document.getElementById('judul_kalkulator');
+        const boxCangkang = document.querySelector('.box-cangkang');
+        const boxListrik = document.querySelector('.box-listrik');
+
+        if (version === 'cangkang') {
+            body.classList.remove('show-listrik');
+            body.classList.add('show-cangkang');
+            btnListrik.classList.remove('active');
+            btnCangkang.classList.add('active');
+            judulKalkulator.innerText = "Kalkulator Konversi Biogas Menjadi Ekuivalen Cangkang";
+            boxCangkang.style.display = 'block';
+            boxListrik.style.display = 'none';
+        } else {
+            body.classList.remove('show-cangkang');
+            body.classList.add('show-listrik');
+            btnCangkang.classList.remove('active');
+            btnListrik.classList.add('active');
+            judulKalkulator.innerText = "Kalkulator Konversi Biogas Menjadi Energi Listrik";
+            boxCangkang.style.display = 'none';
+            boxListrik.style.display = 'block';
+        }
+        hitungMatang();
+    }
+
+    function hitungMatang() {
+        try {
+            const volReaktor = parseFloat(document.getElementById('vol_reaktor').value) || 0;
+            const retentionTime = parseFloat(document.getElementById('retention_time').value) || 0;
+            const codPomeDesain = parseFloat(document.getElementById('cod_pome_desain').value) || 0;
+            const codAktual = parseFloat(document.getElementById('cod_aktual').value) || 0;
+            const pctCodLoading = parseFloat(document.getElementById('pct_cod_loading').value) || 0;
+            const jamFeeding = parseFloat(document.getElementById('jam_feeding').value) || 0;
+            const codRemovalEff = parseFloat(document.getElementById('cod_removal_eff').value) || 0;
+            const faktorCh4 = parseFloat(document.getElementById('faktor_ch4').value) || 0;
+            const konsentrasiCh4 = parseFloat(document.getElementById('konsentrasi_ch4').value) || 0;
+            const prodBiogasAktual = parseFloat(document.getElementById('prod_biogas_aktual').value) || 0;
+
+            const pomeDesain = retentionTime > 0 ? (volReaktor / retentionTime) : 0;
+            const codLoadingDesain = (pomeDesain * codPomeDesain) / 1000;
+            const olr = volReaktor > 0 ? (codLoadingDesain / volReaktor) : 0;
+            const codLoadingAktual = codLoadingDesain * (pctCodLoading / 100);
+            const pomeAktual = codAktual > 0 ? ((codLoadingAktual * 1000) / codAktual) : 0;
+            const retentionTimeAktual = pomeAktual > 0 ? (volReaktor / pomeAktual) : 0;
+            const flowFeeding = jamFeeding > 0 ? (pomeAktual / jamFeeding) : 0;
+            const codRemoved = codLoadingAktual * (codRemovalEff / 100);
+            const prodCh4 = codRemoved * faktorCh4;
+            const prodBiogas = konsentrasiCh4 > 0 ? (prodCh4 / (konsentrasiCh4 / 100)) : 0;
+            const yieldBiogasAktual = pomeAktual > 0 ? (prodBiogasAktual / pomeAktual) : 0;
+
+            document.getElementById('pome_desain').value = pomeDesain.toFixed(1);
+            document.getElementById('olr').value = olr.toFixed(2);
+            document.getElementById('cod_loading_desain').value = codLoadingDesain.toFixed(0);
+            document.getElementById('pome_aktual').value = pomeAktual.toFixed(1);
+            document.getElementById('cod_loading_aktual').value = codLoadingAktual.toFixed(0);
+            document.getElementById('retention_time_aktual').value = retentionTimeAktual.toFixed(1);
+            document.getElementById('flow_feeding').value = flowFeeding.toFixed(1);
+            document.getElementById('cod_removed').value = codRemoved.toFixed(0);
+            document.getElementById('prod_ch4').value = prodCh4.toFixed(0);
+            document.getElementById('prod_biogas').value = prodBiogas.toFixed(0);
+            document.getElementById('yield_biogas_aktual').value = yieldBiogasAktual.toFixed(1);
+
+            if (document.body.classList.contains('show-cangkang')) {
+                const lhvCh4 = parseFloat(document.getElementById('lhv_ch4').value) || 0;
+                const lhvCangkang = parseFloat(document.getElementById('lhv_cangkang').value) || 0;
+
+                const totalEnergiMj = prodCh4 * lhvCh4;
+                const ekuivalenCangkangTon = lhvCangkang > 0 ? (totalEnergiMj / lhvCangkang / 1000) : 0;
+
+                const prodCh4Aktual = prodBiogasAktual * (konsentrasiCh4 / 100);
+                const totalEnergiMjAktual = prodCh4Aktual * lhvCh4;
+                const ekuivalenCangkangTonAktual = lhvCangkang > 0 ? (totalEnergiMjAktual / lhvCangkang / 1000) : 0;
+                const pctEkuivalenCangkang = ekuivalenCangkangTon > 0 ? ((ekuivalenCangkangTonAktual / ekuivalenCangkangTon) * 100) : 0;
+
+                document.getElementById('total_energi_mj').value = totalEnergiMj.toFixed(0);
+                document.getElementById('ekuivalen_cangkang_ton').value = ekuivalenCangkangTon.toFixed(2);
+                document.getElementById('total_energi_mj_aktual').value = totalEnergiMjAktual.toFixed(0);
+                document.getElementById('ekuivalen_cangkang_ton_aktual').value = ekuivalenCangkangTonAktual.toFixed(2);
+                document.getElementById('pct_ekuivalen_cangkang').value = pctEkuivalenCangkang.toFixed(1);
+            }
+
+            if (document.body.classList.contains('show-listrik')) {
+                const kalorCh4Kwh = parseFloat(document.getElementById('kalor_ch4_kwh').value) || 0;
+                const efisiensiListrik = parseFloat(document.getElementById('efisiensi_listrik').value) || 0;
+                const jamOperasiGen = parseFloat(document.getElementById('jam_operasi_gen').value) || 0;
+
+                const kwhToMj = 3.6;
+                const energiKwhDesain = prodCh4 * kalorCh4Kwh * (efisiensiListrik / 100);
+                const dayaKwDesain = jamOperasiGen > 0 ? (energiKwhDesain / jamOperasiGen) : 0;
+
+                const prodCh4Aktual = prodBiogasAktual * (konsentrasiCh4 / 100);
+                const energiKwhAktual = prodCh4Aktual * kalorCh4Kwh * (efisiensiListrik / 100);
+                const dayaKwAktual = jamOperasiGen > 0 ? (energiKwhAktual / jamOperasiGen) : 0;
+
+                document.getElementById('energi_listrik_kwh').value = energiKwhDesain.toFixed(0);
+                document.getElementById('energi_listrik_mj').value = (energiKwhDesain * kwhToMj).toFixed(0);
+                document.getElementById('potensi_daya_kw').value = dayaKwDesain.toFixed(0);
+                document.getElementById('potensi_daya_mw').value = (dayaKwDesain / 1000).toFixed(2);
+
+                document.getElementById('energi_listrik_kwh_aktual').value = energiKwhAktual.toFixed(0);
+                document.getElementById('energi_listrik_mj_aktual').value = (energiKwhAktual * kwhToMj).toFixed(0);
+                document.getElementById('potensi_daya_kw_aktual').value = dayaKwAktual.toFixed(0);
+                document.getElementById('potensi_daya_mw_aktual').value = (dayaKwAktual / 1000).toFixed(2);
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    document.querySelectorAll('.editable').forEach(input => {
+        input.addEventListener('input', hitungMatang);
+    });
+
+    window.onload = function() { 
+        switchVersion('cangkang'); 
+    };
+</script>
+</body>
+</html>
