@@ -175,7 +175,7 @@
             box-shadow: var(--shadow-md);
         }
 
-        .max-width-pome {
+        .max-width-limbah {
             max-width: 580px;
             margin: 0 auto;
         }
@@ -349,9 +349,9 @@
                 <h3>Kalkulator Konversi Biogas</h3>
                 <p>Analisis parameter reaktor, ekuivalen cangkang sawit, serta potensi energi & daya listrik generator.</p>
             </div>
-            <div class="menu-card" onclick="openCalculator('kebutuhan_pome')">
-                <h3>Kalkulator Kebutuhan POME</h3>
-                <p>Hitung estimasi volume POME harian berdasarkan COD Loading Desain, Persen Feeding, Jam Feeding, dan COD Aktual.</p>
+            <div class="menu-card" onclick="openCalculator('kebutuhan_limbah')">
+                <h3>Kalkulator Kebutuhan Limbah</h3>
+                <p>Hitung estimasi volume limbah harian berdasarkan COD Loading Desain, Persen Feeding, Jam Feeding, dan COD Aktual.</p>
             </div>
         </div>
     </div>
@@ -397,13 +397,13 @@
                                 <td class="col-unit">Hari</td>
                             </tr>
                             <tr class="data-row">
-                                <td class="col-label">Kebutuhan POME Desain</td>
-                                <td class="col-input"><input type="number" id="pome_desain" class="readonly" value="0" readonly></td>
+                                <td class="col-label">Kebutuhan Limbah Desain</td>
+                                <td class="col-input"><input type="number" id="limbah_desain" class="readonly" value="0" readonly></td>
                                 <td class="col-unit">M³/Hari</td>
                             </tr>
                             <tr class="data-row">
-                                <td class="col-label">COD POME Desain</td>
-                                <td class="col-input"><input type="number" id="cod_pome_desain" class="editable" value="0"></td>
+                                <td class="col-label">COD Limbah Desain</td>
+                                <td class="col-input"><input type="number" id="cod_limbah_desain" class="editable" value="0"></td>
                                 <td class="col-unit">Mg/l</td>
                             </tr>
                             <tr class="data-row">
@@ -436,12 +436,12 @@
                                 <td class="col-unit">%</td>
                             </tr>
                             <tr class="data-row">
-                                <td class="col-label">Kebutuhan POME Aktual</td>
-                                <td class="col-input"><input type="number" id="pome_aktual" class="readonly" value="0" readonly></td>
+                                <td class="col-label">Kebutuhan Limbah Aktual</td>
+                                <td class="col-input"><input type="number" id="limbah_aktual" class="readonly" value="0" readonly></td>
                                 <td class="col-unit">M³/Hari</td>
                             </tr>
                             <tr class="data-row">
-                                <td class="col-label">COD Loading POME Akt</td>
+                                <td class="col-label">COD Loading Limbah Akt</td>
                                 <td class="col-input"><input type="number" id="cod_loading_aktual" class="readonly" value="0" readonly></td>
                                 <td class="col-unit">Kg/Hari</td>
                             </tr>
@@ -658,15 +658,15 @@
         </div>
     </div>
 
-    <!-- PAGE 2: KALKULATOR KEBUTUHAN POME HARIAN -->
-    <div id="page_kebutuhan_pome" class="calculator-page">
+    <!-- PAGE 2: KALKULATOR KEBUTUHAN LIMBAH HARIAN -->
+    <div id="page_kebutuhan_limbah" class="calculator-page">
         <div class="nav-actions">
             <button class="btn-back" onclick="goToDashboard()">← Kembali ke Menu Utama</button>
         </div>
 
-        <div class="table-container max-width-pome">
+        <div class="table-container max-width-limbah">
             <div class="table-header">
-                <h2>Kalkulator Kebutuhan POME Harian</h2>
+                <h2>Kalkulator Kebutuhan Limbah Harian</h2>
             </div>
 
             <div class="section-title">Input Parameter</div>
@@ -682,28 +682,28 @@
                     <tr class="data-row">
                         <td class="col-label">COD Loading Desain</td>
                         <td class="col-input">
-                            <input type="number" id="pome_cod_loading" class="editable" value="0" placeholder="0">
+                            <input type="number" id="limbah_cod_loading" class="editable" value="0" placeholder="0">
                         </td>
                         <td class="col-unit">Kg/Hari</td>
                     </tr>
                     <tr class="data-row">
-                        <td class="col-label">COD POME Aktual</td>
+                        <td class="col-label">COD Limbah Aktual</td>
                         <td class="col-input">
-                            <input type="number" id="pome_cod_aktual" class="editable" value="0" placeholder="0">
+                            <input type="number" id="limbah_cod_aktual" class="editable" value="0" placeholder="0">
                         </td>
                         <td class="col-unit">Mg/Liter</td>
                     </tr>
                     <tr class="data-row">
                         <td class="col-label">Persen Feeding <span class="range-info">(Rentang: 0 - 100)</span></td>
                         <td class="col-input">
-                            <input type="number" id="pome_pct_feeding" class="editable" value="0" placeholder="0">
+                            <input type="number" id="limbah_pct_feeding" class="editable" value="0" placeholder="0">
                         </td>
                         <td class="col-unit">%</td>
                     </tr>
                     <tr class="data-row">
                         <td class="col-label">Jam Feeding <span class="range-info">(Rentang: 1 - 24)</span></td>
                         <td class="col-input">
-                            <input type="number" id="pome_jam_feeding" class="editable" value="0" placeholder="0">
+                            <input type="number" id="limbah_jam_feeding" class="editable" value="0" placeholder="0">
                         </td>
                         <td class="col-unit">Jam</td>
                     </tr>
@@ -716,21 +716,21 @@
                     <tr class="data-row">
                         <td class="col-label">COD Loading Aktual</td>
                         <td class="col-input">
-                            <input type="number" id="pome_cod_loading_aktual" class="readonly" value="0" readonly>
+                            <input type="number" id="limbah_cod_loading_aktual" class="readonly" value="0" readonly>
                         </td>
                         <td class="col-unit">Kg/Hari</td>
                     </tr>
                     <tr class="data-row">
-                        <td class="col-label">Kebutuhan POME Total</td>
+                        <td class="col-label">Kebutuhan Limbah Total</td>
                         <td class="col-input">
-                            <input type="number" id="pome_harian" class="readonly" value="0" readonly>
+                            <input type="number" id="limbah_harian" class="readonly" value="0" readonly>
                         </td>
                         <td class="col-unit">M³/Hari</td>
                     </tr>
                     <tr class="data-row">
                         <td class="col-label"><strong>Flow Feeding Aktual</strong></td>
                         <td class="col-input">
-                            <input type="number" id="pome_flow_feeding" class="readonly-bold" value="0" readonly>
+                            <input type="number" id="limbah_flow_feeding" class="readonly-bold" value="0" readonly>
                         </td>
                         <td class="col-unit">M³/Jam</td>
                     </tr>
@@ -738,7 +738,7 @@
             </table>
             
             <div class="action-buttons">
-                <button class="btn-reset" onclick="resetKebutuhanPome()">Reset Input</button>
+                <button class="btn-reset" onclick="resetKebutuhanLimbah()">Reset Input</button>
             </div>
         </div>
     </div>
@@ -749,21 +749,21 @@
     function openCalculator(calcId) {
         document.getElementById('page_dashboard').style.display = 'none';
         document.getElementById('page_konversi_biogas').style.display = 'none';
-        document.getElementById('page_kebutuhan_pome').style.display = 'none';
+        document.getElementById('page_kebutuhan_limbah').style.display = 'none';
         document.body.classList.remove('show-cangkang', 'show-listrik');
 
         if (calcId === 'konversi_biogas') {
             document.getElementById('page_konversi_biogas').style.display = 'block';
             switchVersion('cangkang');
-        } else if (calcId === 'kebutuhan_pome') {
-            document.getElementById('page_kebutuhan_pome').style.display = 'block';
-            hitungPome();
+        } else if (calcId === 'kebutuhan_limbah') {
+            document.getElementById('page_kebutuhan_limbah').style.display = 'block';
+            hitungLimbah();
         }
     }
 
     function goToDashboard() {
         document.getElementById('page_konversi_biogas').style.display = 'none';
-        document.getElementById('page_kebutuhan_pome').style.display = 'none';
+        document.getElementById('page_kebutuhan_limbah').style.display = 'none';
         document.getElementById('page_dashboard').style.display = 'block';
         document.body.classList.remove('show-cangkang', 'show-listrik');
     }
@@ -800,7 +800,7 @@
         try {
             const volReaktor = parseFloat(document.getElementById('vol_reaktor').value) || 0;
             const retentionTime = parseFloat(document.getElementById('retention_time').value) || 0;
-            const codPomeDesain = parseFloat(document.getElementById('cod_pome_desain').value) || 0;
+            const codLimbahDesain = parseFloat(document.getElementById('cod_limbah_desain').value) || 0;
             const codAktual = parseFloat(document.getElementById('cod_aktual').value) || 0;
             const pctCodLoading = parseFloat(document.getElementById('pct_cod_loading').value) || 0;
             const jamFeeding = parseFloat(document.getElementById('jam_feeding').value) || 0;
@@ -809,24 +809,24 @@
             const konsentrasiCh4 = parseFloat(document.getElementById('konsentrasi_ch4').value) || 0;
             const prodBiogasAktual = parseFloat(document.getElementById('prod_biogas_aktual').value) || 0;
 
-            const pomeDesain = retentionTime > 0 ? (volReaktor / retentionTime) : 0;
-            const codLoadingDesain = (pomeDesain * codPomeDesain) / 1000;
+            const limbahDesain = retentionTime > 0 ? (volReaktor / retentionTime) : 0;
+            const codLoadingDesain = (limbahDesain * codLimbahDesain) / 1000;
             const olr = volReaktor > 0 ? (codLoadingDesain / volReaktor) : 0;
             const codLoadingAktual = codLoadingDesain * (pctCodLoading / 100);
-            const pomeAktual = codAktual > 0 ? ((codLoadingAktual * 1000) / codAktual) : 0;
-            const retentionTimeAktual = pomeAktual > 0 ? (volReaktor / pomeAktual) : 0;
-            const flowFeeding = jamFeeding > 0 ? (pomeAktual / jamFeeding) : 0;
+            const limbahAktual = codAktual > 0 ? ((codLoadingAktual * 1000) / codAktual) : 0;
+            const retentionTimeAktual = limbahAktual > 0 ? (volReaktor / limbahAktual) : 0;
+            const flowFeeding = jamFeeding > 0 ? (limbahAktual / jamFeeding) : 0;
             const codRemoved = codLoadingAktual * (codRemovalEff / 100);
             
             const prodCh4 = codRemoved * faktorCh4;
             const prodCh4Aktual = prodBiogasAktual * (konsentrasiCh4 / 100);
             const prodBiogas = konsentrasiCh4 > 0 ? (prodCh4 / (konsentrasiCh4 / 100)) : 0;
-            const yieldBiogasAktual = pomeAktual > 0 ? (prodBiogasAktual / pomeAktual) : 0;
+            const yieldBiogasAktual = limbahAktual > 0 ? (prodBiogasAktual / limbahAktual) : 0;
 
-            document.getElementById('pome_desain').value = pomeDesain.toFixed(1);
+            document.getElementById('limbah_desain').value = limbahDesain.toFixed(1);
             document.getElementById('olr').value = olr.toFixed(2);
             document.getElementById('cod_loading_desain').value = codLoadingDesain.toFixed(0);
-            document.getElementById('pome_aktual').value = pomeAktual.toFixed(1);
+            document.getElementById('limbah_aktual').value = limbahAktual.toFixed(1);
             document.getElementById('cod_loading_aktual').value = codLoadingAktual.toFixed(0);
             document.getElementById('retention_time_aktual').value = retentionTimeAktual.toFixed(1);
             document.getElementById('flow_feeding').value = flowFeeding.toFixed(1);
@@ -879,34 +879,34 @@
         } catch (e) { console.error(e); }
     }
 
-    function hitungPome() {
-        const codLoadingDesain = parseFloat(document.getElementById('pome_cod_loading').value) || 0;
-        const codAktual = parseFloat(document.getElementById('pome_cod_aktual').value) || 0;
-        const pctFeeding = parseFloat(document.getElementById('pome_pct_feeding').value) || 0;
-        const jamFeeding = parseFloat(document.getElementById('pome_jam_feeding').value) || 0;
+    function hitungLimbah() {
+        const codLoadingDesain = parseFloat(document.getElementById('limbah_cod_loading').value) || 0;
+        const codAktual = parseFloat(document.getElementById('limbah_cod_aktual').value) || 0;
+        const pctFeeding = parseFloat(document.getElementById('limbah_pct_feeding').value) || 0;
+        const jamFeeding = parseFloat(document.getElementById('limbah_jam_feeding').value) || 0;
 
         const codLoadingAktual = codLoadingDesain * (pctFeeding / 100);
         
-        let pomeHarian = 0;
+        let limbahHarian = 0;
         if (codAktual > 0) {
-            pomeHarian = (codLoadingAktual * 1000) / codAktual;
+            limbahHarian = (codLoadingAktual * 1000) / codAktual;
         }
 
         let flowFeeding = 0;
         if (jamFeeding > 0) {
-            flowFeeding = pomeHarian / jamFeeding;
+            flowFeeding = limbahHarian / jamFeeding;
         }
 
-        document.getElementById('pome_cod_loading_aktual').value = codLoadingAktual.toFixed(0);
-        document.getElementById('pome_harian').value = pomeHarian.toFixed(2);
-        document.getElementById('pome_flow_feeding').value = flowFeeding.toFixed(2);
+        document.getElementById('limbah_cod_loading_aktual').value = codLoadingAktual.toFixed(0);
+        document.getElementById('limbah_harian').value = limbahHarian.toFixed(2);
+        document.getElementById('limbah_flow_feeding').value = flowFeeding.toFixed(2);
     }
 
     // FUNGSI RESET UNTUK MASING-MASING KALKULATOR
     function resetKonversiBiogas() {
         document.getElementById('vol_reaktor').value = 0;
         document.getElementById('retention_time').value = 0;
-        document.getElementById('cod_pome_desain').value = 0;
+        document.getElementById('cod_limbah_desain').value = 0;
         document.getElementById('cod_aktual').value = 0;
         document.getElementById('pct_cod_loading').value = 0;
         document.getElementById('jam_feeding').value = 0;
@@ -925,20 +925,20 @@
         hitungMatang();
     }
 
-    function resetKebutuhanPome() {
-        document.getElementById('pome_cod_loading').value = 0;
-        document.getElementById('pome_cod_aktual').value = 0;
-        document.getElementById('pome_pct_feeding').value = 0;
-        document.getElementById('pome_jam_feeding').value = 0;
+    function resetKebutuhanLimbah() {
+        document.getElementById('limbah_cod_loading').value = 0;
+        document.getElementById('limbah_cod_aktual').value = 0;
+        document.getElementById('limbah_pct_feeding').value = 0;
+        document.getElementById('limbah_jam_feeding').value = 0;
         
-        hitungPome();
+        hitungLimbah();
     }
 
     // REGISTRASI EVENT LISTENERS
-    document.getElementById('pome_cod_loading').addEventListener('input', hitungPome);
-    document.getElementById('pome_cod_aktual').addEventListener('input', hitungPome);
-    document.getElementById('pome_pct_feeding').addEventListener('input', hitungPome);
-    document.getElementById('pome_jam_feeding').addEventListener('input', hitungPome);
+    document.getElementById('limbah_cod_loading').addEventListener('input', hitungLimbah);
+    document.getElementById('limbah_cod_aktual').addEventListener('input', hitungLimbah);
+    document.getElementById('limbah_pct_feeding').addEventListener('input', hitungLimbah);
+    document.getElementById('limbah_jam_feeding').addEventListener('input', hitungLimbah);
 
     document.querySelectorAll('#page_konversi_biogas .editable').forEach(input => {
         input.addEventListener('input', hitungMatang);
