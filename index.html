@@ -18,7 +18,8 @@
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const apakahDariAplikasiAndroid = userAgent.includes("KalkulatorBiogasApp");
       const perangkat = dapatkanPerangkat();
-
+console.log("Perangkat terdeteksi:", perangkat);
+    console.log("Apakah dari aplikasi:", apakahDariAplikasiAndroid);
       // Hanya jalankan pembersihan layar jika bukan di dalam aplikasi 
       // DAN perangkatnya adalah android atau ios
       if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
