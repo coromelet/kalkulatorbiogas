@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Pengolahan Biogas & Kebutuhan Bahan Baku Limbah</title>
-       <script>
+     <script>
   function jalankanDeteksi() {
     function dapatkanPerangkat() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -15,8 +15,9 @@
     }
 
     const perangkat = dapatkanPerangkat();
-    String userAgent = webView.getSettings().getUserAgentString();
-webView.getSettings().setUserAgentString(userAgent + " KalkulatorBiogasApp");
+    
+    // Variabel pengecekan bawaan (bisa disesuaikan jika menggunakan Webview/APK)
+    const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
 
     // Jika dibuka di browser HP biasa (Bukan dari dalam APK Android)
     if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
@@ -31,7 +32,7 @@ webView.getSettings().setUserAgentString(userAgent + " KalkulatorBiogasApp");
                  target="_blank"
                  style="display: inline-block; background-color: #5cb85c; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                  Download APK Sekarang
-</a>
+              </a>
         `;
       } else if (perangkat === 'ios') {
         templateKonten = `
