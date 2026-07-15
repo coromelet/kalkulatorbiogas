@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Pengolahan Biogas & Kebutuhan Bahan Baku Limbah</title>
        <script>
+  function dapatkanPerangkat() {
+      if (/android/i.test(userAgent)) return 'android';
+      if (/iphone|ipad|ipod/i.test(userAgent)) return 'ios';
+      return 'desktop';
+    }
   function jalankanDeteksi() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
       console.log("User Agent:", userAgent);
     console.log("Apakah dari Aplikasi:", apakahDariAplikasiAndroid);
-    function dapatkanPerangkat() {
-      if (/android/i.test(userAgent)) return 'android';
-      if (/iphone|ipad|ipod/i.test(userAgent)) return 'ios';
-      return 'desktop';
-    }
 
     const perangkat = dapatkanPerangkat();
 
@@ -45,7 +45,7 @@
           <p style="font-size: 13px; color: #8e8e93;">Setelah ditambahkan, aplikasi akan muncul di layar utama dan selalu terupdate otomatis!</p>
         `;
       }
-
+  }
       
       // MEMAKSA LAYAR BERSIH: Mengganti seluruh isi tag <body> agar isi kalkulator hilang total
       document.body.innerHTML = `
@@ -56,11 +56,9 @@
         </div>
       `;
     }
-  }
 
   // Menjalankan fungsi di atas tepat setelah halaman selesai dimuat agar tidak bocor
   window.addEventListener('DOMContentLoaded', jalankanDeteksi);
-    jalankanDeteksi();
 </script>
     <!-- Fitur Anti-Cache: Memaksa browser selalu mengambil data terbaru -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
