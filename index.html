@@ -5,59 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Pengolahan Biogas & Kebutuhan Bahan Baku Limbah</title>
-       <script>
+<script>
   function dapatkanPerangkat() {
+      // Variabel userAgent harus didefinisikan di sini agar bisa digunakan
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       if (/android/i.test(userAgent)) return 'android';
       if (/iphone|ipad|ipod/i.test(userAgent)) return 'ios';
       return 'desktop';
-    }
+  }
+
   function jalankanDeteksi() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
-      console.log("User Agent:", userAgent);
-    console.log("Apakah dari Aplikasi:", apakahDariAplikasiAndroid);
+      const apakahDariAplikasiAndroid = userAgent.includes("KalkulatorBiogasApp");
+      const perangkat = dapatkanPerangkat();
 
-    const perangkat = dapatkanPerangkat();
+      // Hanya jalankan pembersihan layar jika bukan di dalam aplikasi 
+      // DAN perangkatnya adalah android atau ios
+      if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
+          let templateKonten = '';
 
-      let templateKonten = '';
+          if (perangkat === 'android') {
+              templateKonten = `
+                  <h2 style="color: #d9534f; margin-bottom: 10px;">Aplikasi Khusus HP Android</h2>
+                  <p style="color: #666; margin-bottom: 20px;">Silakan download dan instal aplikasi resmi kami melalui file APK di bawah ini:</p>
+                  <a href="https://www.mediafire.com/file/n6urkcqxsaixox3/kalkulator-biogas.apk/file" 
+                     target="_blank"
+                     style="display: inline-block; background-color: #5cb85c; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                     Download APK Sekarang
+                  </a>`;
+          } else if (perangkat === 'ios') {
+              templateKonten = `
+                  <h2 style="color: #007aff; margin-bottom: 10px;">Instal di iPhone Kamu</h2>
+                  <p style="color: #666;">Aplikasi ini bisa langsung ditambahkan ke layar utama iPhone tanpa download file:</p>
+                  <div style="background: #f2f2f7; padding: 20px; border-radius: 12px; text-align: left; display: inline-block; margin: 20px 0; max-width: 320px; box-sizing: border-box;">
+                    <ol style="margin: 0; padding-left: 20px; line-height: 1.8; color: #333;">
+                      <li>Ketuk tombol <b>Bagikan (Share)</b> <span style="font-size: 20px;">⎋</span> di bawah Safari.</li>
+                      <li>Gulir ke bawah dan pilih <b>Tambah ke Layar Utama (Add to Home Screen)</b>.</li>
+                      <li>Ketuk <b>Tambah (Add)</b> di pojok kanan atas.</li>
+                    </ol>
+                  </div>`;
+          }
 
-      if (perangkat === 'android') {
-            templateKonten = `
-              <h2 style="color: #d9534f; margin-bottom: 10px;">Aplikasi Khusus HP Android</h2>
-              <p style="color: #666; margin-bottom: 20px;">Silakan download dan instal aplikasi resmi kami melalui file APK di bawah ini:</p>
-              <a href="https://www.mediafire.com/file/n6urkcqxsaixox3/kalkulator-biogas.apk/file" 
-                 target="_blank"
-                 style="display: inline-block; background-color: #5cb85c; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                 Download APK Sekarang
-</a>
-        `;
-      } else if (perangkat === 'ios') {
-        templateKonten = `
-          <h2 style="color: #007aff; margin-bottom: 10px;">Instal di iPhone Kamu</h2>
-          <p style="color: #666;">Aplikasi ini bisa langsung ditambahkan ke layar utama iPhone tanpa download file:</p>
-          <div style="background: #f2f2f7; padding: 20px; border-radius: 12px; text-align: left; display: inline-block; margin: 20px 0; max-width: 320px; box-sizing: border-box;">
-            <ol style="margin: 0; padding-left: 20px; line-height: 1.8; color: #333;">
-              <li>Ketuk tombol <b>Bagikan (Share)</b> <span style="font-size: 20px;">⎋</span> di bawah Safari.</li>
-              <li>Gulir ke bawah dan pilih <b>Tambah ke Layar Utama (Add to Home Screen)</b>.</li>
-              <li>Ketuk <b>Tambah (Add)</b> di pojok kanan atas.</li>
-            </ol>
-          </div>
-          <p style="font-size: 13px; color: #8e8e93;">Setelah ditambahkan, aplikasi akan muncul di layar utama dan selalu terupdate otomatis!</p>
-        `;
+          document.body.innerHTML = `
+              <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: sans-serif;">
+                  <div style="text-align: center; padding: 20px; max-width: 90%;">${templateKonten}</div>
+              </div>`;
       }
   }
-      
-      // MEMAKSA LAYAR BERSIH: Mengganti seluruh isi tag <body> agar isi kalkulator hilang total
-      document.body.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; box-sizing: border-box;">
-          <div style="text-align: center; padding: 20px; max-width: 90%;">
-            ${templateKonten}
-          </div>
-        </div>
-      `;
-    }
 
-  // Menjalankan fungsi di atas tepat setelah halaman selesai dimuat agar tidak bocor
   window.addEventListener('DOMContentLoaded', jalankanDeteksi);
 </script>
     <!-- Fitur Anti-Cache: Memaksa browser selalu mengambil data terbaru -->
