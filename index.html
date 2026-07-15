@@ -15,9 +15,11 @@
 
     const perangkat = dapatkanPerangkat();
     
-       const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
+    // Variabel pengecekan bawaan (bisa disesuaikan jika menggunakan Webview/APK)
+    const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
 
-        if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
+    // Jika dibuka di browser HP biasa (Bukan dari dalam APK Android)
+    if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
       
       let templateKonten = '';
 
@@ -707,7 +709,7 @@
 
             <div class="action-buttons">
                 <button class="btn-reset" onclick="resetKonversiBiogas()">Reset Input</button>
-                <button class="btn-print" onclick="jalankanCetak()">Cetak Halaman Ini (PDF)</button>
+                <button class="btn-print" onclick="window.print()">Cetak Halaman Ini (PDF)</button>
             </div>
         </div>
     </div>
@@ -1038,12 +1040,5 @@
     });
   }
 </script>
-    function jalankanCetak() {
-    if (window.AndroidPrinter) {
-        window.AndroidPrinter.cetak();
-    } else {
-        window.print();
-    }
-}
 </body>
 </html>
