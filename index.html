@@ -15,7 +15,8 @@
     }
 
     const perangkat = dapatkanPerangkat();
-    const apakahDariAplikasiAndroid = navigator.userAgent.includes("KalkulatorBiogasApp");
+    String userAgent = webView.getSettings().getUserAgentString();
+webView.getSettings().setUserAgentString(userAgent + " KalkulatorBiogasApp");
 
     // Jika dibuka di browser HP biasa (Bukan dari dalam APK Android)
     if ((perangkat === 'android' && !apakahDariAplikasiAndroid) || perangkat === 'ios') {
