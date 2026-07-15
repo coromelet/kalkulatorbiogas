@@ -850,7 +850,7 @@
                 document.getElementById('total_energi_mj').value = totalEnergiMj.toFixed(0);
                 document.getElementById('ekuivalen_cangkang_kg').value = ekuivalenCangkangKg.toFixed(0);
                 document.getElementById('total_energi_mj_aktual').value = totalEnergiMjAktual.toFixed(0);
-                document.getElementById('ekuivalen_cangkang_kg_aktual').value = ekuivalenCangkangKgAktual.toFixed(0);
+                document.getElementById('ekuivalen_cangkang_kg_aktual').value = ekuivalenCangkangKg_aktual.toFixed(0);
                 document.getElementById('pct_ekuivalen_cangkang').value = pctEkuivalenCangkang.toFixed(1);
             }
 
@@ -949,17 +949,37 @@
     };
 </script>
 
-<!-- Script khusus untuk menghapus paksa Service Worker (PWA) agar cache segera diperbarui -->
+<!-- Script PWA Pintar: Otomatis mendeteksi update file (sw.js) di GitHub dan langsung me-refresh aplikasi -->
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for(let registration of registrations) {
-        registration.unregister().then(function(boolean) {
-          if(boolean) {
-            console.log('Cache lama dihapus, memuat versi terbaru...');
-            window.location.reload();
-          }
-        });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          console.log('Service Worker terdaftar!');
+          
+          // Deteksi jika ada pembaruan file sw.js di server
+          reg.onupdatefound = () => {
+            const installingWorker = reg.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  // Jika ada update baru, paksa Service Worker untuk skipWaiting (langsung aktif)
+                  console.log('Update baru ditemukan, menerapkan perubahan...');
+                  installingWorker.postMessage({ action: 'skipWaiting' });
+                }
+              }
+            };
+          };
+        })
+        .catch(err => console.log('Gagal daftar:', err));
+    });
+
+    // Otomatis refresh browser ketika Service Worker baru mengambil alih
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
       }
     });
   }
