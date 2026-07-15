@@ -1,5 +1,5 @@
 // 1. SETIAP KALI KAMU UPDATE WEB, CUKUP GANTI VERSI DI BAWAH INI (misal dari v1 ke v2, v3, dst.)
-const CACHE_NAME = 'biogas-calc-v2'; 
+const CACHE_NAME = 'biogas-calc-v5'; 
 
 const ASSETS_TO_CACHE = [
   './',
