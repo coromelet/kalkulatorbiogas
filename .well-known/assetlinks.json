@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.coromelet.kalkulatorbiogas",
+    "sha256_cert_fingerprints": ["77:32:7F:04:97:5C:D3:BA:DD:6B:44:4E:25:F4:25:53:A9:23:20:C6:DA:5D:4C:F8:91:4C:F6:F8:75:95:A6:97"
+      "PASTE_KODE_SHA256_KAMU_DISINI"
+   ]
+  }
+}]
