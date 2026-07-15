@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
-   <script>
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Pengolahan Biogas & Kebutuhan Bahan Baku Limbah</title>
+       <script>
   function jalankanDeteksi() {
     function dapatkanPerangkat() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -55,12 +60,6 @@
   // Menjalankan fungsi di atas tepat setelah halaman selesai dimuat agar tidak bocor
   window.addEventListener('DOMContentLoaded', jalankanDeteksi);
 </script>
-<head>
-    <link rel="manifest" href="manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Pengolahan Biogas & Kebutuhan Bahan Baku Limbah</title>
-    
     <!-- Fitur Anti-Cache: Memaksa browser selalu mengambil data terbaru -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
