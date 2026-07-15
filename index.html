@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Kalkulator Biogas & POME</title>
@@ -940,6 +941,13 @@
     window.onload = function() { 
         goToDashboard(); 
     };
+</script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Aplikasi Biogas siap diinstal!'))
+      .catch((err) => console.log('Gagal memuat aplikasi:', err));
+  }
 </script>
 </body>
 </html>
